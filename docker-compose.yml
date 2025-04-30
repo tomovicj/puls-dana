@@ -5,20 +5,25 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+      MONGODB_DB: "puls-dana"
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
     volumes:
       - mongo-data:/data/db
+      - ./mongodb-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
 
   backend:
     build: ./backend
     ports:
       - "8080:8080"
     environment:
-      MONGO_HOST: mongodb
-      MONGO_PORT: 27017
-      MONGO_USERNAME: ${MONGO_USERNAME}
-      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DB: "puls-dana"
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
     depends_on:
       - mongodb
 
