@@ -15,17 +15,15 @@ public class NewsController {
     private final NewsService service;
 
     @GetMapping
-    public List<News> getNews() {
+    public List<News> getNews(@RequestParam(required = false) String source) {
+        if (source != null) {
+            return service.getNewsBySource(source);
+        }
         return service.getNews();
     }
 
     @GetMapping("/{id}")
     public News getNewsById(@PathVariable String id) {
         return service.getNewsById(id);
-    }
-
-    @GetMapping
-    public List<News> getNewsBySource(@RequestParam String source) {
-        return service.getNewsBySource(source);
     }
 }
