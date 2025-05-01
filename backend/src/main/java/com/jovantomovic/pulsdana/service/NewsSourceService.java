@@ -23,6 +23,10 @@ public class NewsSourceService {
                 .orElseThrow(() -> new ResourceNotFoundException("News source not found"));
     }
 
+    public List<NewsSource> getEnabledNewsSources() {
+        return repository.findByIsEnabledIsTrueAndDeletedAtIsNull();
+    }
+
     public NewsSource createNewsSource(NewsSource model) {
         NewsSource ns = new NewsSource();
         ns.setName(model.getName());

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface NewsSourceRepository extends MongoRepository<NewsSource, String> {
     List<NewsSource> findByDeletedAtIsNull();
     Optional<NewsSource> findByNameAndDeletedAtIsNull(String name);
+    List<NewsSource> findByIsEnabledIsTrueAndDeletedAtIsNull();
 }

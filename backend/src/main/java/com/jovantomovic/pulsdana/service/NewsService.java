@@ -40,4 +40,12 @@ public class NewsService {
         news.setDownVotes(new ArrayList<>());
         return repository.save(news);
     }
+
+    public List<News> saveAllNews(List<News> newsList) {
+        List<News> savedNews = new ArrayList<>();
+        for (News news: newsList) {
+            savedNews.add(saveNews(news));
+        }
+        return savedNews;
+    }
 }
