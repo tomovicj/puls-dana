@@ -24,6 +24,7 @@ services:
       MONGODB_DB: "puls-dana"
       MONGODB_USERNAME: ${MONGODB_USERNAME}
       MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
     depends_on:
       - mongodb
 
