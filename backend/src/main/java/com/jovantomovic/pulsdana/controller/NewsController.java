@@ -1,6 +1,6 @@
 package com.jovantomovic.pulsdana.controller;
 
-import com.jovantomovic.pulsdana.model.News;
+import com.jovantomovic.pulsdana.dto.NewsResponse;
 import com.jovantomovic.pulsdana.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +15,19 @@ public class NewsController {
     private final NewsService service;
 
     @GetMapping
-    public List<News> getNews(@RequestParam(required = false) String source) {
+    public List<NewsResponse> getNews(@RequestParam(required = false) String source) {
         if (source != null) {
-            return service.getNewsBySource(source);
+            return service.newsListToNewsResponseList(
+                    service.getNewsBySource(source)
+            );
         }
-        return service.getNews();
+        return service.newsListToNewsResponseList(
+                service.getNews()
+        );
     }
 
     @GetMapping("/{id}")
-    public News getNewsById(@PathVariable String id) {
-        return service.getNewsById(id);
+    public NewsResponse getNewsById(@PathVariable String id) {
+        return new NewsResponse(service.getNewsById(id));
     }
 }

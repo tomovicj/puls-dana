@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Document(collation = "news")
+@Document
 public class News {
     @Id
     private String id;
