@@ -1,7 +1,5 @@
 package com.jovantomovic.pulsdana.dto;
 
-import com.jovantomovic.pulsdana.model.Comment;
-import com.jovantomovic.pulsdana.model.News;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class NewsResponse {
+public class NewsCommentResponse {
     private String id;
-    private String title;
-    private String summary;
-    private String imageUrl;
-    private LocalDateTime publishedAt;
-    private String postUrl;
-    private String source;
+    private String username;
+    private String content;
+    private LocalDateTime createdAt;
     private Integer upVotes;
     private Integer downVotes;
-    private Integer commentCount;
+    private List<NewsCommentResponse> replies;
 }

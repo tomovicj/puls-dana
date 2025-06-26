@@ -9,18 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class NewsService {
     private final NewsRepository repository;
-
-    public List<NewsResponse> newsListToNewsResponseList(List<News> newsList) {
-        return newsList.stream()
-                .map(NewsResponse::new)
-                .collect(Collectors.toList());
-    }
+    private final NewsCommentsService newsCommentsService;
 
     public List<News> getNews() {
         return repository.findByDeletedAtIsNull();
@@ -35,7 +31,11 @@ public class NewsService {
         return repository.findBySourceAndDeletedAtIsNull(sourceName);
     }
 
-    public News saveNews(News model) {
+    public News saveNews(News news) {
+        return repository.save(news);
+    }
+
+    public News createNews(News model) {
         News news = new News();
         news.setTitle(model.getTitle());
         news.setSummary(model.getSummary());
@@ -46,14 +46,40 @@ public class NewsService {
         news.setComments(new ArrayList<>());
         news.setUpVotes(new ArrayList<>());
         news.setDownVotes(new ArrayList<>());
-        return repository.save(news);
+        return saveNews(news);
     }
 
-    public List<News> saveAllNews(List<News> newsList) {
-        List<News> savedNews = new ArrayList<>();
+    public List<News> createAllNews(List<News> newsList) {
+        List<News> createdNews = new ArrayList<>();
         for (News news: newsList) {
-            savedNews.add(saveNews(news));
+            createdNews.add(createNews(news));
         }
-        return savedNews;
+        return createdNews;
+    }
+
+    public NewsResponse newsToResponse(News news) {
+        if (news.getDeletedAt() != null) {
+            return null;
+        }
+
+        NewsResponse nr = new NewsResponse();
+        nr.setId(news.getId());
+        nr.setTitle(news.getTitle());
+        nr.setSummary(news.getSummary());
+        nr.setImageUrl(news.getImageUrl());
+        nr.setPublishedAt(news.getPublishedAt());
+        nr.setPostUrl(news.getPostUrl());
+        nr.setSource(news.getSource());
+        nr.setUpVotes(news.getUpVotes().size());
+        nr.setDownVotes(news.getDownVotes().size());
+        nr.setCommentCount(newsCommentsService.countComments(news.getComments()));
+        return nr;
+    }
+
+    public List<NewsResponse> newsToResponse(List<News> newsList) {
+        return newsList.stream()
+                .map(this::newsToResponse)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

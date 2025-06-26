@@ -94,7 +94,7 @@ public class RssFeedService {
         for (NewsSource ns: newsSources) {
             List<News> allNews = fetchNewsFromRss(ns);
             List<News> newNews = filterOutOldNews(allNews);
-            newsService.saveAllNews(newNews);
+            newsService.createAllNews(newNews);
         }
     }
 }
